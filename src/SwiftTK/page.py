@@ -3,7 +3,7 @@ from PIL import Image
 
 class Page:
     def __init__(self):
-        self.onEnter = lambda: print("")
+        self.onEnter = lambda: print("",end="")
         self._frame = None
         self._vars = {}
         self._reloading = False
@@ -22,15 +22,28 @@ class Page:
 
     # Made to refresh the information on the page
     def reload(self):
-        if not self._reloading:
-            self._reloading = True
-            # Pass the root as the parent when reloading
-            self._frame = self._promised_frame(self._app.root)
-            self._reloading = False
+        # Prevent concurrent reloads
+        if self._reloading:
+            return
+        self._reloading = True
+        try:
+            # Basic validation
+            if self._app is None or not hasattr(self._app, "root") or self._app.root is None:
+                raise RuntimeError("Cannot reload page: app or app.root is not set")
+
+            # Clear existing pages first to avoid duplicate widgets
             self._app.clear_pages()
-            c_frame = self._frame
-            c_frame.master = self._app.root
-            c_frame.pack(fill="both", expand=True)
+
+            # Create the new frame using the promised factory
+            if not callable(self._promised_frame):
+                raise RuntimeError("Promised frame is not callable")
+            self._frame = self._promised_frame(self._app.root)
+
+            # Pack the created frame so it becomes visible
+            self._frame.pack(fill="both", expand=True)
+        finally:
+            # Always clear the flag even if an exception is raised
+            self._reloading = False
 
     # The method to migrate to another page
     def to_Page(self, page, info=[]):

@@ -1,14 +1,14 @@
 import customtkinter as ctk
 
 class Application:
-    def __init__(self, title, dimensions):
+    def __init__(self, title, dimensions, appearance="System", theme="blue"):
         self._current_page = 0
         self._pages = []
         self._pages_names = []
         
         # Initialize CustomTkinter
-        ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-        ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+        ctk.set_appearance_mode(appearance)  # Modes: "System" (standard), "Dark", "Light"
+        ctk.set_default_color_theme(theme)  # Themes: "blue" (standard), "green", "dark-blue"
         
         self.root = ctk.CTk()
         self.root.title(title)
