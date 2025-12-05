@@ -23,4 +23,5 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/yourusername/ctk_router"
+"Homepage" = "https://github.com/JonathanHarris2/SwiftTK"
+"Bug Tracker" = "https://github.com/JonathanHarris2/SwiftTK/issues"
